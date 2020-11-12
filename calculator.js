@@ -3,6 +3,20 @@
 /*          www.youtube.com/Code Explained           */
 /* ------------------------------------------------- */
 
+//SELECTOR ELEMENTS
+const input_element = document.querySelector('.input');
+const output_operation_element = document.querySelector('.operation value');
+const output_result_element = document.querySelector('.result value');
+
+//SOME VARIABLES
+const OPERATORS = ["+", "-", "*", "/"];
+const POWER = "POWER", FACTORIAL = "FACTORIAL";
+let data = {
+    operation : [],
+    formula : []
+}
+
+
 // CALCULATOR BUTTONS
 let calculator_buttons = [
     {
@@ -215,6 +229,27 @@ let calculator_buttons = [
         type : "operator"
     }
 ];
+
+//CREATE CALCULATOR BUTTONS
+function createCalculatorButtons(){
+    const bnts_per_row = 8;
+    let added_btns = 0;
+
+    calculator_buttons.forEach( button => {
+        if(added_btns % bnts_per_row == 0){
+            input_element.innerHTML += `<div class="row"></div>`
+        }
+
+        const row = document.querySelector(".row:last-child");
+        row.innerHTML += `<button id="${button.name}">
+                            ${button.symbol}
+                         </button>`
+
+        added_btns++;
+    })
+}
+
+createCalculatorButtons()
 
 // GAMMA FUNCTINON
 function gamma(n) {  // accurate to about 15 decimal places
