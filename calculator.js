@@ -5,8 +5,8 @@
 
 //SELECTOR ELEMENTS
 const input_element = document.querySelector('.input');
-const output_operation_element = document.querySelector('.operation value');
-const output_result_element = document.querySelector('.result value');
+const output_operation_element = document.querySelector('.operation .value');
+const output_result_element = document.querySelector('.result .value');
 
 //SOME VARIABLES
 const OPERATORS = ["+", "-", "*", "/"];
@@ -286,6 +286,13 @@ function calculator(button){
 }
 
 //UPDATE OUTPUT
+function updateOutputOperation(operation){
+    output_operation_element.innerHTML = operation
+}
+
+function updateOutputResult(result){
+    output_result_element.innerHTML = result
+}
 
 // GAMMA FUNCTINON
 function gamma(n) {  // accurate to about 15 decimal places
