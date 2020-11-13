@@ -16,6 +16,8 @@ let data = {
     formula : []
 }
 
+let ans = 0;
+
 
 // CALCULATOR BUTTONS
 let calculator_buttons = [
@@ -250,6 +252,32 @@ function createCalculatorButtons(){
 }
 
 createCalculatorButtons()
+
+//CLICK EVENT LISTENER
+input_element.addEventListener("click", event =>{
+    const target_btn = event.target;
+
+    calculator_buttons.forEach(button => {
+        if(button.name == target_btn.id) calculator(button);
+    })
+})
+
+//CALCULATOR
+function calculator(button){
+    if(button.type == "operator"){
+
+    }else if(button.type == "number"){
+
+    }else if(button.type == "trigo_function"){
+
+    }else if(button.type == "math_function"){
+
+    }else if(button.type == "key"){
+
+    }else if(button.type == "calculate"){
+
+    }
+}
 
 // GAMMA FUNCTINON
 function gamma(n) {  // accurate to about 15 decimal places
