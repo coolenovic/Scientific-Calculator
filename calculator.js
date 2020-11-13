@@ -265,8 +265,12 @@ input_element.addEventListener("click", event =>{
 //CALCULATOR
 function calculator(button){
     if(button.type == "operator"){
+        data.operation.push( button.symbol );
+        data.formula.push( button.formula );
 
     }else if(button.type == "number"){
+        data.operation.push( button.symbol );
+        data.formula.push( button.formula );
 
     }else if(button.type == "trigo_function"){
 
@@ -277,7 +281,11 @@ function calculator(button){
     }else if(button.type == "calculate"){
 
     }
+
+    updateOutputOperation( data.operation.join(''));
 }
+
+//UPDATE OUTPUT
 
 // GAMMA FUNCTINON
 function gamma(n) {  // accurate to about 15 decimal places
