@@ -277,9 +277,24 @@ function calculator(button){
     }else if(button.type == "math_function"){
 
     }else if(button.type == "key"){
+        if(button.name == "clear"){
+            data.operation = [];
+            data.formula = [];
+
+            updateOutputResult(0);
+
+        } else if(button.name == "delete"){
+            data.operation.pop();
+            data.formula.pop();
+        }
+
 
     }else if(button.type == "calculate"){
+        formula_str = data.formula.join('');
 
+        let result = eval(formula_str);
+
+        updateOutputResult(result);
     }
 
     updateOutputOperation( data.operation.join(''));
