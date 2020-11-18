@@ -358,6 +358,19 @@ function updateOutputResult(result){
     output_result_element.innerHTML = result
 }
 
+//FACTORIAL FUNCTION
+function factorial(number){
+    if(number % 1 != 0) return gamma(number + 1);
+    if(number === 0 || number === 1) return 1;
+
+    let result = 1;
+    for(let i = 1; i <= number; i++){
+        result *= i;
+        if(result === Infinity) return Infinity
+    }
+    return result;
+}
+
 // GAMMA FUNCTINON
 function gamma(n) {  // accurate to about 15 decimal places
     //some magic constants 
