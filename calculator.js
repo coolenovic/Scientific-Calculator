@@ -253,6 +253,19 @@ function createCalculatorButtons(){
 
 createCalculatorButtons()
 
+//RAD and DEG
+let RADIAN = true;
+
+const rad_btn = document.getElementById("rad");
+const deg_btn = document.getElementById("deg");
+
+rad_btn.classList.add("active-angle");
+
+function angleToggler(){
+    rad_btn.classList.toggle("active-angle");
+    deg_btn.classList.toggle("active-angle");
+}
+
 //CLICK EVENT LISTENER
 input_element.addEventListener("click", event =>{
     const target_btn = event.target;
@@ -273,6 +286,8 @@ function calculator(button){
         data.formula.push( button.formula );
 
     }else if(button.type == "trigo_function"){
+        data.operation.push(button.symbol + "(");
+        data.formula.push(button.formula);
 
     }else if(button.type == "math_function"){
         let symbol, formula;
@@ -315,8 +330,13 @@ function calculator(button){
         } else if(button.name == "delete"){
             data.operation.pop();
             data.formula.pop();
+        } else if (button.name == "rad"){
+            RADIAN =true;
+            angleToggler();
+        } else if (button.name == "deg"){
+            RADIAN =false;
+            angleToggler();
         }
-
 
     }else if(button.type == "calculate"){
         formula_str = data.formula.join('');
@@ -355,4 +375,21 @@ function gamma(n) {  // accurate to about 15 decimal places
       var t = n + g + 0.5;
       return Math.sqrt(2 * Math.PI) * Math.pow(t, (n + 0.5)) * Math.exp(-t) * x;
     }
+}
+
+//TRIGOMETRIC FUNCTIONS
+function trigo(callback, angle){
+    if(!RADIAN){
+       angle = angle * Math.PI/180; 
+    }
+    return callback(angle);
+}
+
+function inv_trigo(callback, value){
+    let angle = callback(value);
+
+    if(!RADIAN){
+        angle = angle * 180/Math.PI;
+    }
+    return angle;
 }
