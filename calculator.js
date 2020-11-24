@@ -341,12 +341,161 @@ function calculator(button){
     }else if(button.type == "calculate"){
         formula_str = data.formula.join('');
 
-        let result = eval(formula_str);
+        //FIX POWER AND FACTORIAL ISSUE
+        /* SEARCH FOR FACTORIAL AND POWER FUNCTIONS */
+        let POWER_SEARCH_RESULT = search(data.formula, POWER);
+        let FACTORIAL_SEARCH_RESULT = search(data.formula, FACTORIAL);
+
+        /* GET POWER BASE AND REPLACE WITH THE RIGHT FORMULA*/
+        const BASES = powerBaseGetter(data.formula, POWER_SEARCH_RESULT);
+
+        //console.log(BASES);
+        
+        BASES.forEach( base => {
+            //console.log(base)
+            let toReplace = base * POWER;
+            let replacement = "Math.pow(" + base + ",";
+            //console.log(toReplace);
+            //console.log(replacement);
+
+            formula_str = formula_str.replace(toReplace, replacement);
+            console.log(formula_str)
+        })
+
+        /* GET FACTORIAL NUMBER AND REPLACE WITH THE RIGHT FORMULA*/
+        const NUMBERS = factorialNumberGetter(data.formula, FACTORIAL_SEARCH_RESULT);
+        NUMBERS.forEach( factorial => {
+            formula_str = formula_str.replace(factorial.toReplace, factorial.replacement);
+        })
+        console.log(NUMBERS);
+
+        console.log(formula_str);
+        
+        //CALCULATE
+        let result;
+        try{
+            result = eval(formula_str);
+        }catch(error) {
+            //console.log(error)
+            if(error instanceof SyntaxError){
+                result = "Syntax Error!"
+                updateOutputResult(result);
+                return;
+            }
+        }
+
+        //SAVE RESULT FOR LATER USE
+        ans = result
+        data.operation = [result];
+        data.formula = [result];
 
         updateOutputResult(result);
+        return;
     }
 
     updateOutputOperation( data.operation.join(''));
+}
+
+//FACTORIAL NUMBER GETTER
+function factorialNumberGetter(formula, FACTORIAL_SEARCH_RESULT) {
+    let numbers = []; //SAVE ALL NUMBERS IN THE SAME ARRAY
+    let factorial_sequence = 0;
+
+    FACTORIAL_SEARCH_RESULT.forEach(factorial_index =>{
+        let number = []; //current factorial number
+
+        let next_index = factorial_index + 1;
+        let next_input = formula[next_index];
+
+        if( next_index == FACTORIAL){
+            factorial_sequence += 1;
+            return
+        }
+
+        //IF THERE IS A FACTORIAL SEQUENCE, NEED TO GET 
+        //THE INDEX OF THE VERY FIRST FACTORIAL FUNCTION
+        let first_factorial_index = factorial_index - factorial_sequence;
+
+        //THEN TO GET THE NUMBER RIGHT BEFORE IT
+        let previous_index = first_factorial_index -1;
+        let parentheses_count = 0;
+
+        while( previous_index >= 0) {
+            if(formula[previous_index] == "(") parentheses_count--;
+            if(formula[previous_index] == ")") parentheses_count++;
+            
+            let is_operator = false;
+            OPERATORS.forEach(OPERATOR => {
+                if(formula[previous_index] == OPERATOR) is_operator = true;
+            })
+
+            if( is_operator && parentheses_count == 0) break;
+
+            number.unshift(formula[previous_index]);
+            previous_index--;
+        }
+
+        let number_str = number.join('');
+        const factorial = "factorial(", close_paranthesis = ")";
+        let times = factorial_sequence + 1;
+
+        let toReplace = number_str + FACTORIAL.repeat(times);
+        let replacement = factorial.repeat(times) + number_str + close_paranthesis.repeat(times);
+
+        numbers.push({
+            toReplace : toReplace,
+            replacement : replacement
+        })
+
+        //RESET factorial_sequence
+        factorial_sequence = 0;
+    })
+
+    return numbers;
+}
+
+//POWER BASE GETTER
+function powerBaseGetter(formula, POWER_SEARCH_RESULT){
+    let powers_bases = []; // SAVE ALL BASES IN THE SAME ARRAY
+
+    POWER_SEARCH_RESULT.forEach(power_index => {
+        let base = []; //current base
+
+        let parentheses_count = 0;
+
+        let previous_index = power_index - 1;
+
+        while( previous_index >= 0) {
+            if(formula[previous_index] == "(") parentheses_count--;
+            if(formula[previous_index] == ")") parentheses_count++;
+            
+            let is_operator = false;
+            OPERATORS.forEach(OPERATOR => {
+                if(formula[previous_index] == OPERATOR) is_operator = true;
+            })
+
+            let is_power = formula[previous_index] == POWER;
+
+            if( (is_operator && parentheses_count == 0) || is_power) break;
+
+            base.unshift(formula[previous_index]);
+            previous_index--;
+        }
+
+        powers_bases.push(base.join(''));
+    })
+
+    return powers_bases;
+}
+
+//SEARCH AN ARRAY
+function search(array, keyword) {
+    let search_result = [];
+
+    array.forEach((element, index) => {
+        if (element == keyword) search_result.push(index);
+    })
+    return search_result;
 }
 
 //UPDATE OUTPUT
