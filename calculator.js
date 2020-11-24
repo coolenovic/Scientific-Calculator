@@ -277,14 +277,14 @@ input_element.addEventListener("click", event =>{
 
 //CALCULATOR
 function calculator(button){
-    if(button.type == "operator"){
+    if(button.type == "operator" || button.type == "number"){
         data.operation.push( button.symbol );
         data.formula.push( button.formula );
-
+/*
     }else if(button.type == "number"){
         data.operation.push( button.symbol );
         data.formula.push( button.formula );
-
+*/
     }else if(button.type == "trigo_function"){
         data.operation.push(button.symbol + "(");
         data.formula.push(button.formula);
